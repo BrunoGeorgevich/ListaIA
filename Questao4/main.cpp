@@ -183,12 +183,12 @@ void print(Board *current) {
 bool checkAnswer(int col, int row, Board *current) {
     if(col > 2 || col < 0 || row < 0 || row > 2) {
         cout << "=============  ERRO  =============" << endl;
-        cout << "Posição selecionada não é válida!\n";
+        cout << "Posicao selecionada nao e valida!\n";
         return false;
     }
     if(current->data[row][col] != Null) {
         cout << "=============  ERRO  =============" << endl;
-        cout << "Posição selecionada já está ocupada!\n";
+        cout << "Posicao selecionada ja esta ocupada!\n";
         return false;
     }
     return true;
@@ -237,18 +237,25 @@ int minimax(Board *current, Player turn, int depth) {
 
 Player selectFirstOne() {
     cout << "=============  MENU  =============" << endl;
-    cout << "Quem começa jogando?\n\t1)Humano\n\t2)IA\n";
+    cout << "Quem comeca jogando?\n\t1)Humano\n\t2)IA\n";
     int option;
     cin >> option;
     if(option > 2 || option < 1) {
         cout << "=============  ERRO  =============" << endl;
-        cout << "Escolha uma das opções listadas!" << endl;
+        cout << "Escolha uma das opcoes listadas!" << endl;
         return selectFirstOne();
     }
     else if(option == 1)
         return human;
     else if(option == 2)
         return ia;
+}
+
+bool checkDraw(Board *current) {
+    vector<Board *> moves = generateNextMoves(current,human,0);
+    if(moves.size() == 0)
+        return true;
+    return false;
 }
 
 int main()
@@ -259,6 +266,10 @@ int main()
     cout << "=============  JOGO  =============" << endl;
     while(checkVictory(mainBoard) == 0) {
         print(mainBoard);
+        if(checkDraw(mainBoard)) {
+            cout << "============= EMPATE =============" << endl;
+            return 0;
+        }
         if(currentTurn == human) {
             humanTurn(mainBoard);
         } else if(currentTurn == ia) {
